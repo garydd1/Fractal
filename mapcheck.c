@@ -6,18 +6,11 @@
 /*   By: dgarizad <dgarizad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 15:24:43 by dgarizad          #+#    #+#             */
-/*   Updated: 2023/04/14 23:05:49 by dgarizad         ###   ########.fr       */
+/*   Updated: 2023/04/16 11:51:58 by dgarizad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "./inc/so_long.h"
-
-// NOTICE THAT ERRORS SHOULD BE PRINTED IN fd 2. stderr. 
-void	ft_error(char *err)
-{
-	printf("%s", err);
-	exit(0);
-}
 
 /**
  * @brief Norminette issues. 
@@ -86,23 +79,29 @@ static int	ft_read_map(t_data *data, int fd)
 	return (0);
 }
 
-int	ft_map_check(int argc, char **argv)
+/**
+ * @brief Checks if the input file is readable, rectangular, 
+ * has correct number and type of characters,
+ * is properly borded and if the map is playable.
+ * 
+ * @param argc 
+ * @param argv 
+ * @return int 
+ */
+int	ft_map_check(int argc, char **argv, t_data *data)
 {
 	int		fd;
-	t_data	data;
-	
+
 	if (argc != 2)
 		ft_error(INPUT_NBR);
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
 		ft_error(INPUT_FILE);
-	ft_memset(&data, 0, sizeof(t_data));
-	ft_read_map(&data, fd);
-	ft_is_rectang(&data);
-	ft_check_chars(&data);
-	ft_surround(&data);
-	printf("\nok: '%d'\n%s\n\n", data.bytes, data.map);
+	ft_read_map(data, fd);
+	ft_is_rectang(data);
+	ft_check_chars(data);
+	ft_surround(data);
 	close(fd);
-	ft_bfs(&data);
+	ft_bfs(data);
 	return (0);
 }

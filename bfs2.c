@@ -6,7 +6,7 @@
 /*   By: dgarizad <dgarizad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 18:04:03 by dgarizad          #+#    #+#             */
-/*   Updated: 2023/04/14 20:39:57 by dgarizad         ###   ########.fr       */
+/*   Updated: 2023/04/15 13:32:58 by dgarizad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,15 @@
 // UTILS FOR BREADHTFIRST
 void	ft_free_splits(char **splited)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	while (splited[i] != NULL)
 		free(splited[i++]);
 	free(splited[i]);
 	free(splited);
 }
+
 t_queue	*ft_getlast(t_queue *lst)
 {
 	while (lst)
@@ -49,7 +50,6 @@ t_queue	*ft_newqueue(void *content, t_queue *queue)
 {
 	t_queue	*new_node;
 
-	printf("\nnewqreceived coord: %d,%d\n", ((int *)content)[0], ((int *)content)[1]);
 	new_node = malloc(sizeof(t_queue));
 	if (!new_node)
 		return (NULL);
@@ -57,12 +57,17 @@ t_queue	*ft_newqueue(void *content, t_queue *queue)
 	new_node->col = ((int *)content)[1];
 	new_node -> next = NULL;
 	new_node->visited = queue->visited;
-	new_node->target[0] = queue->target[0];
-	new_node->target[1] = queue->target[1];
-	printf("\nnew node coorde: %d,%d\n", new_node->row, new_node->col);
 	return (new_node);
 }
 
+/**
+ * @brief Allocates a new node that contains location info
+ * for the visited "pixels". It is a FIFO queue.
+ * @param queue 
+ * @param row 
+ * @param col 
+ * @return int 
+ */
 int	ft_add2queue(t_queue *queue, int row, int col)
 {
 	t_queue	*new;
@@ -70,11 +75,8 @@ int	ft_add2queue(t_queue *queue, int row, int col)
 
 	coords[0] = row;
 	coords[1] = col;
-	printf("\nWTFreceived coord: %d,%d\n", row, col);
-	print_visited(queue);
 	(queue->visited)[row][col] = 'Q';
 	new = ft_newqueue(coords, queue);
 	ft_add_back(queue, new);
-	printf("\nnewww first coord: %d,%d\n", queue->next->row, queue->next->col);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: dgarizad <dgarizad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 16:03:01 by dgarizad          #+#    #+#             */
-/*   Updated: 2023/04/14 19:35:49 by dgarizad         ###   ########.fr       */
+/*   Updated: 2023/04/15 13:36:00 by dgarizad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,14 @@ t_queue	*ft_mary_poppins(t_queue *queue)
 	return (aux);
 }
 
+void	ft_add(t_queue *queue, char c)
+{
+	if (c == 'E')
+		(queue->exits)++;
+	if (c == 'C')
+		(queue->coins)++;
+}
+
 /**
  * @brief Returns 0 if finds the target.
  * Analize the neighbors and add them to queue if
@@ -47,17 +55,16 @@ int	ft_neighbors(t_queue *queue, int row, int col, char **map_s)
 	j = 0;
 	while (j < 2)
 	{
-		if (map_s[row][col + i] == map_s[queue->target[0]][queue->target[1]] || \
-		map_s[row + i][col] == map_s[queue->target[0]][queue->target[1]])
-			return (0);
 		if (queue->visited[row][col + i] == 'N' && map_s[row][col + i] != '1')
 		{
 			queue->visited[row][col + i] = 'Y';
+			ft_add(queue, map_s[row][col + i]);
 			ft_add2queue(queue, row, col + i);
 		}
 		if (queue->visited[row + i][col] == 'N' && map_s[row + i][col] != '1')
 		{
 			queue->visited[row + i][col] = 'Y';
+			ft_add(queue, map_s[row + i][col]);
 			ft_add2queue(queue, row + i, col);
 		}
 		j++;
@@ -110,9 +117,9 @@ int	ft_surround(t_data *data)
 
 	flag = 0;
 	map_s = ft_split(data->map, '\n');
-	if (ft_look(map_s, data) == 1)	
+	if (ft_look(map_s, data) == 1)
 		flag = 1;
-	ft_free_splits(map_s);	
+	ft_free_splits(map_s);
 	if (flag == 1)
 		ft_error(MAP_BORDER);
 	return (0);
